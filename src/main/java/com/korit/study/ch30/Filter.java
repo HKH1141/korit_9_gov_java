@@ -1,6 +1,10 @@
 package com.korit.study.ch30;
 
+import com.korit.study.ch23.CollectionMain;
+
 import java.sql.SQLOutput;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -31,6 +35,37 @@ class Product {
     }
 }
 
+class Item {
+    String name;
+    int stock;
+    boolean onSale;
+    int price;
+    // constructor, getters
+
+    public Item(String name, int stock, boolean onSale, int price) {
+        this.name = name;
+        this.stock = stock;
+        this.onSale = onSale;
+        this.price = price;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getStock() {
+        return stock;
+    }
+
+    public boolean isOnSale() {
+        return onSale;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+}
 
 
 public class Filter {
@@ -92,6 +127,60 @@ public class Filter {
                 .filter(m -> m.contains("gmail.com"))
                 .toList();
         System.out.println(gmail);
+///     재고가 1개 이상 있고(stock > 0), 할인 중인(onSale = true) 상품만 필터링하세요. 예상 출력: [노트북, 헤드셋]
+        List<Item> items = Arrays.asList(
+                new Item("노트북", 5, true, 1000000),
+                new Item("마우스", 0, true, 30000),
+                new Item("키보드", 10, false, 50000),
+                new Item("헤드셋", 3, true, 80000),
+                new Item("웹캠", 0, false, 60000)
+        );
+
+        List<String> item = items.stream()
+                .filter(i -> i.stock > 0 && i.onSale)
+                .map(i -> i.name)
+                .toList();
+        System.out.println(item);
+///
+        List<Integer> numbers2 = Arrays.asList(1, 2, 3, 2, 4, 5, 3, 6, 7, 5, 8);
+
+        List<Integer> num2 = numbers2.stream()
+                .filter(n -> numbers2.stream().filter(num3 -> num3 == n).count() == 1)
+                .toList();
+        System.out.println(num2);
+
+        List<Integer> filteringNumbers2 = new ArrayList<>();
+        for (Integer n : numbers2) {
+            int count = 0;
+            for (Integer n2 : numbers2){
+                if (n2 == n) {
+                    count++;
+                }
+            }
+            if (count == 1) {
+                filteringNumbers2.add(n);
+            }
+
+        }
+        System.out.println(filteringNumbers2);
+///
+        List<LocalDate> dates = Arrays.asList(
+                LocalDate.of(2024, 1, 1),  // 월요일
+                LocalDate.of(2024, 1, 6),  // 토요일
+                LocalDate.of(2024, 1, 7),  // 일요일
+                LocalDate.of(2024, 1, 10), // 수요일
+                LocalDate.of(2024, 1, 13), // 토요일
+                LocalDate.of(2024, 1, 14)  // 일요일
+        );
+
+        System.out.println(LocalDate.of(2024, 1, 6).getDayOfWeek());
+
+        List<LocalDate> filteringDates = dates.stream()
+                .filter(localdate -> localdate.getDayOfWeek().name().equals("SATURDAY")
+                        || localdate.getDayOfWeek().name().equals("SUNDAY"))
+                .toList();
+
+        System.out.println(filteringDates);
     }
 
 }
